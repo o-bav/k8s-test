@@ -1,5 +1,12 @@
 # k8s-test
+Для поднятия кластера K8S используются уже оттестированные модули
 
+https://github.com/terraform-aws-modules/terraform-aws-vpc
+
+https://github.com/terraform-aws-modules/terraform-aws-eks
+
+
+Для деплоя APP
 
 1. Создать namespace:
 
