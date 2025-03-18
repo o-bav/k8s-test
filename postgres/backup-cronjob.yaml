@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+  namespace: postgres
+spec:
+  schedule: "0 3 * * *" # Каждый день в 03:00 UTC
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: backup
+            image: postgres:latest
+            env:
+            - name: PGPASSWORD
+              value: "mypassword"
+            command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              pg_dump -h postgres-service -U admin mydatabase > /backup/backup-$(date +%F).sql
+            volumeMounts:
+            - mountPath: /backup
+              name: backup-volume
+          volumes:
+          - name: backup-volume
+            persistentVolumeClaim:
+              claimName: postgres-pvc
